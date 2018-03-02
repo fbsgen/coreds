@@ -2,7 +2,7 @@ config("coreds_config") {
   include_dirs = [ "src" ]
 }
 
-static_library("coreds") {
+source_set("coreds") {
   sources = [
     "src/coreds/util.h",
     "src/coreds/b64.h",
