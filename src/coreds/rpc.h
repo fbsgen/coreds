@@ -153,9 +153,9 @@ struct Base : brynet::NonCopyable
     const std::string host;
     flatbuffers::Parser parser;
     std::string errmsg;
-
-private:
     std::string req_host;
+    
+private:
     std::string req_buf;
     brynet::net::WrapTcpService service;
     bool started{ false };
