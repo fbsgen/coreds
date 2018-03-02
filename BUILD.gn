@@ -1,0 +1,14 @@
+config("coreds_config") {
+  include_dirs = [ "src" ]
+}
+
+static_library("coreds") {
+  sources = [
+    "src/coreds/util.h",
+    "src/coreds/b64.h",
+    "src/coreds/rpc.h", # depends on brynet
+    "src/coreds/pstore.h", # depends on flatbuffers
+  ]
+  public_configs = [ ":coreds_config" ]
+}
+
