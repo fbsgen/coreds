@@ -261,7 +261,7 @@ protected:
     /**
      * Returns true if the connection is successful or if already connected when not forced.
      */
-    bool connect(bool force)
+    bool connect(bool force = false)
     {
         bool ret = !force && SOCKET_ERROR != fd;
         
