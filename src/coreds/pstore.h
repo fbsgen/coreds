@@ -126,6 +126,10 @@ public:
     {
         key_buf.reserve(13); // + 1 for the null char
     }
+    bool empty()
+    {
+        return list.empty();
+    }
     int size()
     {
         return list.size();
