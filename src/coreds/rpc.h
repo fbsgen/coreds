@@ -65,13 +65,13 @@ const bool parseJson(std::string& body,
     {
         errmsg.assign(rpc::extractMsg(body));
     }
-    else if (!parser.SetRootType(root) || !parser.ParseJson(rpc::extractJson(body), true))
+    else if (!root || (parser.SetRootType(root) && parser.ParseJson(rpc::extractJson(body), true)))
     {
-        errmsg.assign(MALFORMED_MESSAGE);
+        ok = true;
     }
     else
     {
-        ok = true;
+        errmsg.assign(MALFORMED_MESSAGE);
     }
     
     return ok;
