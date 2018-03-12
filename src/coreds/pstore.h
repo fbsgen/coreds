@@ -94,7 +94,7 @@ struct PojoStore
 private:
     const std::function<void()> $populate = std::bind(&PojoStore::populate, this);
     std::deque<T> list;
-    T* startObj{ nullptr };
+    //T* startObj{ nullptr };
     
     bool loading_{ false };
     bool desc_{ true };
@@ -142,9 +142,14 @@ public:
     {
         return list.size();
     }
-    bool isLoading()
+    bool loading()
     {
         return loading_;
+    }
+    void loading(bool val)
+    {
+        loading_ = val;
+        $fnEvent(EventType::LOADING, val);
     }
     bool isDesc()
     {
