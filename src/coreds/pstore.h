@@ -126,6 +126,14 @@ public:
     {
         key_buf.reserve(13); // + 1 for the null char
     }
+    T* front()
+    {
+        return list.empty() ? nullptr : &list.front();
+    }
+    T* back()
+    {
+        return list.empty() ? nullptr : &list.back();
+    }
     bool empty()
     {
         return list.empty();
