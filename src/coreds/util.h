@@ -113,6 +113,7 @@ static int appendTo(std::string& str, int seconds, int count,
 void appendTimeagoTo(std::string& str, uint64_t ts,
     int64_t now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 {
+    size_t prev = str.size();
     int64_t diff = now - ts;
     if (diff == 0)
     {
@@ -135,7 +136,9 @@ void appendTimeagoTo(std::string& str, uint64_t ts,
         appendTo(str, seconds, 1, "second");
     }
     
-    if (diff < 0)
+    if (prev == str.size())
+        str += "just moments ago";
+    else if (diff < 0)
         str += " from now";
     else
         str += " ago";
