@@ -114,6 +114,25 @@ private:
 public:
     std::string errmsg;
     
+    std::function<void()> $toggleSort{
+        std::bind(&PojoStore::toggleSort, this)
+    };
+    std::function<void()> $refresh{
+        std::bind(&PojoStore::refresh, this)
+    };
+    std::function<void()> $gotoFirst{
+        std::bind(&PojoStore::gotoFirst, this)
+    };
+    std::function<void()> $gotoLast{
+        std::bind(&PojoStore::gotoLast, this)
+    };
+    std::function<void()> $prevOrLoad{
+        std::bind(&PojoStore::prevOrLoad, this)
+    };
+    std::function<void()> $nextOrLoad{
+        std::bind(&PojoStore::nextOrLoad, this)
+    };
+    
     std::function<const char*(const T& pojo)> $fnKey;
     std::function<const char*(const F* message)> $fnKeyFB;
     std::function<bool(ParamRangeKey prk)> $fnFetch;
@@ -544,6 +563,38 @@ public:
         if (idx != -1)
             selected = &list[(page * pageSize) + idx];
     }
+    // std functions for ui event listeners
+    void toggleSort()
+    {
+        toggleDesc();
+    }
+    void refresh()
+    {
+        fetchUpdate();
+    }
+    void gotoFirst()
+    {
+        pageTo(0);
+    }
+    void gotoLast()
+    {
+        pageTo(page_count);
+    }
+    void prevOrLoad()
+    {
+        if (0 != page)
+            pageTo(page - 1);
+        else
+            fetchNewer();
+    }
+    void nextOrLoad()
+    {
+        if (page_count != page)
+            pageTo(page + 1);
+        else
+            fetchOlder();
+    }
+    
     // from ts verson
     /*int populate(SelectionType type, SelectionFlags flags,
             bool main, int idxSelected, int page)
