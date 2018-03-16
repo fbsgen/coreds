@@ -237,6 +237,10 @@ public:
         
         return true;
     }
+    void repaint()
+    {
+        $fnCall($populate);
+    }
     void populate()
     {
         T* pojo;
