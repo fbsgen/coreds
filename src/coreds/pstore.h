@@ -138,7 +138,7 @@ public:
     std::function<bool(ParamRangeKey prk)> $fnFetch;
     std::function<void(T& pojo, const F* message)> $fnUpdate;
     std::function<void(EventType type, bool on)> $fnEvent;
-    std::function<void(int idx, T* pojo)> $fnPopulate;
+    std::function<void(int idx, T* pojo, int64_t ts)> $fnPopulate;
     std::function<void(std::function<void()> op)> $fnCall;
     
     PojoStore()
@@ -255,12 +255,13 @@ public:
         page_vcount = len;
         page_count = (size - 1) / pageSize;
         
+        int64_t now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         for (; i < len; i++)
         {
             offset = desc_ ? start + i : start + size - i - 1;
             pojo = &list[offset];
             
-            $fnPopulate(i, pojo);
+            $fnPopulate(i, pojo, now);
             
             if (selected_idx == -1 && selected && selected == pojo)
                 selected_idx = i;
@@ -268,7 +269,7 @@ public:
         
         this->selected_idx = selected_idx;
         
-        for (; i < pageSize; i++) $fnPopulate(i, nullptr);
+        for (; i < pageSize; i++) $fnPopulate(i, nullptr, now);
     }
     /*
      * Returns true if an item was removed.
