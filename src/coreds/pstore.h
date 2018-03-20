@@ -245,12 +245,32 @@ public:
     {
         T* pojo;
         int size = list.size(),
-            populatePages = page * pageSize,
-            len = std::min(pageSize, size - populatePages),
-            start = desc_ ? populatePages : -populatePages,
             i = 0,
             selected_idx = -1,
-            offset;
+            offset,
+            populatePages,
+            len,
+            start;
+        
+        if (size == 0)
+        {
+            if (page != 0)
+                page = 0;
+            
+            if (!desc_)
+            {
+                desc_ = true;
+                $fnEvent(EventType::VISIBLE, desc_);
+            }
+        }
+        else if (page != 0 && (page * pageSize) >= size)
+        {
+            page = 0;
+        }
+        
+        populatePages = page * pageSize;
+        len = std::min(pageSize, size - populatePages);
+        start = desc_ ? populatePages : -populatePages;
         
         page_vcount = len;
         page_count = (size - 1) / pageSize;
@@ -284,12 +304,17 @@ public:
             if (size <= pageSize)
             {
                 list.clear();
+                $fnEvent(EventType::VISIBLE, false);
                 return true;
             }
             
             populatePages = page * pageSize;
-            list.erase(list.begin() + populatePages, list.begin() + (populatePages + size));
-            $fnEvent(EventType::VISIBLE, false);
+            if (desc_)
+                list.erase(list.begin() + populatePages, list.begin() + (populatePages + size));
+            else
+                list.erase(list.begin(), list.begin() + (size - populatePages));
+            
+            $fnCall($populate);
             return true;
         }
         
@@ -297,7 +322,7 @@ public:
         i = 0;
         removed = 0;
         populatePages = page * populateLen;
-        idx = populatePages;
+        idx = desc_ ? populatePages : size - populatePages - 1;
         
         for (;;)
         {
@@ -309,8 +334,15 @@ public:
                 
                 $fnUpdate(existing, update);
                 
-                if (++idx == size)
+                if (desc_)
+                {
+                    if (++idx == size)
+                        break;
+                }
+                else if (--idx == -1)
+                {
                     break;
+                }
                 
                 if (i != updateLen)
                     continue;
@@ -328,14 +360,24 @@ public:
             list.erase(list.begin() + idx);
             removed++;
             size--;
-
-            if (idx == size)
+            
+            if (desc_)
+            {
+                if (idx == size)
+                    break;
+            }
+            else if (--idx == -1)
+            {
                 break;
+            }
         }
         
         for (; i < updateLen; i++)
         {
-            list.emplace_back(updateList->Get(i));
+            if (desc_)
+                list.emplace_back(updateList->Get(i));
+            else
+                list.emplace_front(updateList->Get(i));
         }
         
         // TODO check if current page is affected before you populate
