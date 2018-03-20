@@ -393,7 +393,7 @@ public:
                 if (p == nullptr || 0 == p->size())
                     break;
 
-                if (!list.empty() && desc_)
+                if (!list.empty())
                     prependAll(p, true);
                 else
                     appendAll(p);
@@ -402,10 +402,7 @@ public:
                 if (p == nullptr || 0 == p->size())
                     break;
                 
-                if (desc_)
-                    appendAll(p);
-                else
-                    prependAll(p, true);
+                appendAll(p);
                 break;
             case FetchType::UPDATE:
                 update(p);
@@ -589,6 +586,8 @@ public:
     {
         if (0 != page)
             pageTo(page - 1);
+        else if (!desc_)
+            fetchOlder();
         else
             fetchNewer();
     }
@@ -596,6 +595,8 @@ public:
     {
         if (page_count != page)
             pageTo(page + 1);
+        else if (!desc_)
+            fetchNewer();
         else
             fetchOlder();
     }
