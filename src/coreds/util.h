@@ -110,6 +110,11 @@ static int appendTo(std::string& str, int seconds, int count,
     return static_cast<unsigned>(seconds) % count;
 }
 
+inline int64_t now()
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+}
+
 void appendTimeagoTo(std::string& str, uint64_t ts,
     int64_t now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 {
