@@ -276,18 +276,19 @@ public:
         page_count = (size - 1) / pageSize;
         
         int64_t now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        
+        // reset
+        this->selected_idx = selected_idx;
         for (; i < len; i++)
         {
             offset = desc_ ? start + i : start + size - i - 1;
             pojo = &list[offset];
             
-            $fnPopulate(i, pojo, now);
-            
             if (selected_idx == -1 && selected && selected == pojo)
-                selected_idx = i;
+                this->selected_idx = selected_idx = i;
+            
+            $fnPopulate(i, pojo, now);
         }
-        
-        this->selected_idx = selected_idx;
         
         for (; i < pageSize; i++) $fnPopulate(i, nullptr, now);
     }
