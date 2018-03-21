@@ -6,6 +6,13 @@
 #include <chrono>
 
 namespace coreds {
+
+template <typename T>
+struct HasState
+{
+    virtual void update(T state) = 0;
+};
+
 namespace util {
 
 const char* const DEFAULT_HOST = "127.0.0.1";
