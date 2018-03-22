@@ -97,6 +97,42 @@ public:
     {
         return flags == 0;
     }
+    bool empty_bool()
+    {
+        return list_bool.empty();
+    }
+    bool empty_bytes()
+    {
+        return list_bytes.empty();
+    }
+    bool empty_string()
+    {
+        return list_string.empty();
+    }
+    bool empty_uint32()
+    {
+        return list_uint32.empty();
+    }
+    bool empty_fixed32()
+    {
+        return list_fixed32.empty();
+    }
+    bool empty_fixed64()
+    {
+        return list_fixed64.empty();
+    }
+    void clear()
+    {
+        if (flags != 0)
+        {
+            list_bool.clear();
+            list_bytes.clear();
+            list_string.clear();
+            list_uint32.clear();
+            list_fixed32.clear();
+            list_fixed64.clear();
+        }
+    }
     MultiCAS& add(int f, bool newVal)
     {
         flags |= (1 << FN_BOOL);
