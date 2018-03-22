@@ -133,6 +133,7 @@ public:
     {
         if (flags != 0)
         {
+            flags = 0;
             list_bool.clear();
             list_bytes.clear();
             list_string.clear();
