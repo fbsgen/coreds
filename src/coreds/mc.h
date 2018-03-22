@@ -155,11 +155,19 @@ public:
         list_bytes.emplace_front(f, newVal, oldVal);
         return *this;
     }
+    MultiCAS& addBytes(int f, const std::string& newVal, const std::string& oldVal)
+    {
+        return addBytes(f, &newVal, &oldVal);
+    }
     MultiCAS& add(int f, const std::string* newVal, const std::string* oldVal)
     {
         flags |= (1 << FN_STRING);
         list_string.emplace_front(f, newVal, oldVal);
         return *this;
+    }
+    MultiCAS& add(int f, const std::string& newVal, const std::string& oldVal)
+    {
+        return add(f, &newVal, &oldVal);
     }
     MultiCAS& add(int f, double newVal, double oldVal)
     {
