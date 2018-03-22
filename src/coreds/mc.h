@@ -82,7 +82,7 @@ private:
     std::forward_list<std::tuple<int,double,double>> list_double;
     std::forward_list<std::tuple<int,unsigned,unsigned>> list_uint32;
     //std::forward_list<std::tuple<int,uint64_t,uint64_t>> list_uint64;
-    //std::forward_list<std::tuple<int,int32_t,int32_t>> list_int32;
+    std::forward_list<std::tuple<int,int,int>> list_int32;
     //std::forward_list<std::tuple<int,int64_t,int64_t>> list_int64;
     std::forward_list<std::tuple<int,int32_t,int32_t>> list_fixed32;
     std::forward_list<std::tuple<int,int64_t,int64_t>> list_fixed64;
@@ -113,6 +113,14 @@ public:
     {
         return list_uint32.empty();
     }
+    bool empty_int32()
+    {
+        return list_int32.empty();
+    }
+    bool empty_int8()
+    {
+        return empty_int32();
+    }
     bool empty_fixed32()
     {
         return list_fixed32.empty();
@@ -129,6 +137,7 @@ public:
             list_bytes.clear();
             list_string.clear();
             list_uint32.clear();
+            list_int32.clear();
             list_fixed32.clear();
             list_fixed64.clear();
         }
@@ -164,6 +173,17 @@ public:
         flags |= (1 << FN_UINT32);
         list_uint32.emplace_front(f, newVal, oldVal);
         return *this;
+    }
+    // var int
+    MultiCAS& addInt32(int f, int newVal, int oldVal)
+    {
+        flags |= (1 << FN_INT32);
+        list_int32.emplace_front(f, newVal, oldVal);
+        return *this;
+    }
+    MultiCAS& addInt8(int f, int newVal, int oldVal)
+    {
+        return addInt32(f, newVal, oldVal);
     }
     // 32
     MultiCAS& addFixed32(int f, int32_t newVal, int32_t oldVal)
@@ -318,6 +338,30 @@ private:
         while (true);
         buf += ']';
     }
+    void int32_to(std::string& buf)
+    {
+        buf += R"("8":[)";
+        do
+        {
+            auto& f = list_int32.front();
+            buf += R"({"1":)";
+            buf += std::to_string(std::get<0>(f));
+            
+            buf += R"(,"2":)";
+            buf += std::to_string(std::get<2>(f));
+            
+            buf += R"(,"3":)";
+            buf += std::to_string(std::get<1>(f));
+            
+            buf += '}';
+            list_int32.pop_front();
+            if (list_int32.empty())
+                break;
+            buf += ',';
+        }
+        while (true);
+        buf += ']';
+    }
     void fixed32_to(std::string& buf)
     {
         buf += R"("10":[)";
@@ -410,6 +454,13 @@ public:
                 buf += ',';
             
             uint32_to(buf);
+        }
+        if (!list_int32.empty())
+        {
+            if (sz != buf.size())
+                buf += ',';
+            
+            int32_to(buf);
         }
         if (!list_fixed32.empty())
         {
