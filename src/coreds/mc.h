@@ -80,7 +80,7 @@ private:
     std::forward_list<std::tuple<int,const std::string*,const std::string*>> list_string;
     //std::forward_list<std::tuple<int,float,float>> list_float;
     std::forward_list<std::tuple<int,double,double>> list_double;
-    std::forward_list<std::tuple<int,unsigned,unsigned>> list_uint32;
+    //std::forward_list<std::tuple<int,unsigned,unsigned>> list_uint32;
     //std::forward_list<std::tuple<int,uint64_t,uint64_t>> list_uint64;
     std::forward_list<std::tuple<int,int,int>> list_int32;
     //std::forward_list<std::tuple<int,int64_t,int64_t>> list_int64;
@@ -109,10 +109,10 @@ public:
     {
         return list_string.empty();
     }
-    bool empty_uint32()
+    /*bool empty_uint32()
     {
         return list_uint32.empty();
-    }
+    }*/
     bool empty_int32()
     {
         return list_int32.empty();
@@ -136,7 +136,7 @@ public:
             list_bool.clear();
             list_bytes.clear();
             list_string.clear();
-            list_uint32.clear();
+            //list_uint32.clear();
             list_int32.clear();
             list_fixed32.clear();
             list_fixed64.clear();
@@ -167,6 +167,7 @@ public:
         list_double.emplace_front(f, newVal, oldVal);
         return *this;
     }
+    /*
     // var int
     MultiCAS& addUint32(int f, unsigned newVal, unsigned oldVal)
     {
@@ -174,6 +175,7 @@ public:
         list_uint32.emplace_front(f, newVal, oldVal);
         return *this;
     }
+    */
     // var int
     MultiCAS& addInt32(int f, int newVal, int oldVal)
     {
@@ -182,6 +184,10 @@ public:
         return *this;
     }
     MultiCAS& addInt8(int f, int newVal, int oldVal)
+    {
+        return addInt32(f, newVal, oldVal);
+    }
+    MultiCAS& add8(int f, int newVal, int oldVal)
     {
         return addInt32(f, newVal, oldVal);
     }
@@ -314,7 +320,7 @@ private:
         while (true);
         buf += ']';
     }
-    void uint32_to(std::string& buf)
+    /*void uint32_to(std::string& buf)
     {
         buf += R"("6":[)";
         do
@@ -337,7 +343,7 @@ private:
         }
         while (true);
         buf += ']';
-    }
+    }*/
     void int32_to(std::string& buf)
     {
         buf += R"("8":[)";
@@ -448,13 +454,13 @@ public:
             
             double_to(buf);
         }
-        if (!list_uint32.empty())
+        /*if (!list_uint32.empty())
         {
             if (sz != buf.size())
                 buf += ',';
             
             uint32_to(buf);
-        }
+        }*/
         if (!list_int32.empty())
         {
             if (sz != buf.size())
