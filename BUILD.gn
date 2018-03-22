@@ -6,8 +6,9 @@ source_set("coreds") {
   sources = [
     "src/coreds/util.h",
     "src/coreds/b64.h",
-    "src/coreds/rpc.h", # depends on brynet
+    "src/coreds/mc.h", # depends on flatbuffers
     "src/coreds/pstore.h", # depends on flatbuffers
+    "src/coreds/rpc.h", # depends on brynet
   ]
   public_configs = [ ":coreds_config" ]
 }
