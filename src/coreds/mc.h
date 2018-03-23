@@ -238,7 +238,7 @@ private:
     void bool_to(std::string& buf)
     {
         buf += R"("1":[)";
-        do
+        for (;;)
         {
             auto& f = list_bool.front();
             buf += R"({"1":)";
@@ -254,13 +254,12 @@ private:
                 break;
             buf += ',';
         }
-        while (true);
         buf += ']';
     }
     void bytes_to(std::string& buf)
     {
         buf += R"("2":[)";
-        do
+        for (;;)
         {
             auto& f = list_bytes.front();
             buf += R"({"1":)";
@@ -278,13 +277,12 @@ private:
                 break;
             buf += ',';
         }
-        while (true);
         buf += ']';
     }
     void string_to(std::string& buf)
     {
         buf += R"("3":[)";
-        do
+        for (;;)
         {
             auto& f = list_string.front();
             buf += R"({"1":)";
@@ -302,13 +300,12 @@ private:
                 break;
             buf += ',';
         }
-        while (true);
         buf += ']';
     }
     void double_to(std::string& buf)
     {
         buf += R"("5":[)";
-        do
+        for (;;)
         {
             auto& f = list_double.front();
             buf += R"({"1":)";
@@ -326,13 +323,12 @@ private:
                 break;
             buf += ',';
         }
-        while (true);
         buf += ']';
     }
     /*void uint32_to(std::string& buf)
     {
         buf += R"("6":[)";
-        do
+        for (;;)
         {
             auto& f = list_uint32.front();
             buf += R"({"1":)";
@@ -350,13 +346,12 @@ private:
                 break;
             buf += ',';
         }
-        while (true);
         buf += ']';
     }*/
     void int32_to(std::string& buf)
     {
         buf += R"("8":[)";
-        do
+        for (;;)
         {
             auto& f = list_int32.front();
             buf += R"({"1":)";
@@ -374,13 +369,12 @@ private:
                 break;
             buf += ',';
         }
-        while (true);
         buf += ']';
     }
     void fixed32_to(std::string& buf)
     {
         buf += R"("10":[)";
-        do
+        for (;;)
         {
             auto& f = list_fixed32.front();
             buf += R"({"1":)";
@@ -398,13 +392,12 @@ private:
                 break;
             buf += ',';
         }
-        while (true);
         buf += ']';
     }
     void fixed64_to(std::string& buf)
     {
         buf += R"("11":[)";
-        do
+        for (;;)
         {
             auto& f = list_fixed64.front();
             buf += R"({"1":)";
@@ -422,7 +415,6 @@ private:
                 break;
             buf += ',';
         }
-        while (true);
         buf += ']';
     }
 public:
@@ -493,6 +485,7 @@ public:
         }
         
         buf += '}';
+        flags = 0;
     }
 };
 
